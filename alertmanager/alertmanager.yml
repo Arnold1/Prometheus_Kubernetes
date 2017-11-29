@@ -1,0 +1,27 @@
+global:
+  # The auth token for Hipchat.
+  hipchat_auth_token: 'urEBN2rTh55Z5NmMolQVpHU2jKQ8ZLY0Ghvl1fD4'
+  # Alternative host for Hipchat.
+  hipchat_api_url: 'https://api.hipchat.com/' #https://company.hipchat.com/admin/api'
+
+# The root route on which each incoming alert enters.
+route:
+  group_by: [cluster] # If an alert isn't caught by a route, send it to hipchat.
+  receiver: team-hipchat
+  routes:
+  # Send severity=hipchat alerts to hipchat.
+  - match:
+      severity: hipchat
+    receiver: team-hipchat
+
+receivers:
+  - name: team-hipchat
+    hipchat_configs:
+    - auth_token: 'eWqwrcrYQJSo4m6WcWHKE8yw21PEFjzwKRuTpiFj' # 'eNp8vpBEynVj1QFsv9IiJKsSwfmxM6xEJzyWBplM' #'eWqwrcrYQJSo4m6WcWHKE8yw21PEFjzwKRuTpiFj'
+      room_id: 3982885
+      message_format: html
+      notify: true
+      #title: '{{.CommonAnnotations.summary}}'
+      #message: '{{ .CommonAnnotations.description }}'
+      # Template for the text field in hipchat messages.
+      #message: 'Event:\n {{ .CommonAnnotations.summary }} Description:\n {{ .CommonAnnotations.description }}'

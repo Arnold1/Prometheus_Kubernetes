@@ -1,0 +1,14 @@
+groups:
+- name: example
+  rules:
+  - alert: High500ErrorRate
+    expr: rate( hello_requests_total{status="500"}[1m]) > 0
+    for: 1m
+    labels:
+      severity: hipchat
+    annotations:
+      summary: 'High number of 5xx errors on {{ $labels.instance }}'
+      description: '{{$labels.job}} has {{$value}}% 5xx errors'
+    
+    #summary: High request latency
+    #https://github.com/alerta/prometheus-config/blob/8a13f25e7d79c4c41e6535501920ce095238ef3d/examples/rules.yml

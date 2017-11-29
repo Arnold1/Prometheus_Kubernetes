@@ -1,0 +1,39 @@
+version: "2"
+
+services:
+
+  prometheus-server:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/alert.yml:/etc/prometheus/alert.yml
+    links:
+      - "alertmanager:alertmanager"
+
+  alertmanager:
+    image: prom/alertmanager
+    restart: on-failure #unless-stopped
+    ports:
+      - 9093:9093
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/config.yml
+    command:
+      - '-config.file=/etc/alertmanager/config.yml'
+      - '-storage.path=/alertmanager'
+      - '-log.level=debug'
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=password
+    links:
+      - prometheus-server:prometheus
+
+  go-mux-example:
+    image: mux:v1
+    ports:
+      - 8080:8080

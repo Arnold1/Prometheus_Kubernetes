@@ -1,0 +1,28 @@
+# my global config
+global:
+    scrape_interval:     15s
+    evaluation_interval: 15s
+
+    external_labels:
+        monitor: 'myapp-monitor'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+       - alertmanager:9093
+
+rule_files:
+    - "alert.yml"
+    # - "first.rules"
+    # - "second.rules"
+
+scrape_configs:
+    - job_name: 'prometheus'
+      static_configs:
+          - targets: ['localhost:9090']
+
+    - job_name: 'mux'
+      static_configs:
+          - targets: ['go-mux-example:8080']
